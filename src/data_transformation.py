@@ -11,18 +11,10 @@ from sklearn.datasets.species_distributions import construct_grids
 from sklearn.neighbors import KernelDensity
 from sklearn import preprocessing
 
-def get_weather_data_for_year(year):
-    weather_data = pd.read_csv("../data/PreProcessed_Weather_Data_%s.csv"%year)
+def get_weather_data_for_year():
+    weather_data = pd.read_csv("../data/weather_data.csv")
     weather_data.rename(columns={"Weather_Date":"timestamp"}, inplace=True)
     return weather_data
-
-def get_crime_data_for_year(year):
-    crime_data = pd.read_csv("../data/Preprocessed_Crime_Data_%s_new.csv"%year, parse_dates=['Date'], usecols=["Date","Latitude","Longitude","Primary Type"])
-    crime_data.rename(columns={"Latitude":"lat"}, inplace=True)
-    crime_data.rename(columns={"Longitude":"long"}, inplace=True)
-    crime_data.rename(columns={"Date":"timestamp"}, inplace=True)
-    crime_data['timestamp'] = crime_data['timestamp'].dt.date
-    return crime_data
 
 class City:
     def __init__(self, x_left_lower_corner, y_left_lower_corner, x_upper_right_corner, 
@@ -111,10 +103,10 @@ def get_full_year_grid_wise_data(grid_line, grid_size):
 grid_line = int(sys.argv[1])
 grid_size = int(sys.argv[2])
 
-yelp_df = pd.read_csv("../data/Yelp.csv")
-police_df = pd.read_csv("../data/Police.csv")
-crime_df = get_crime_data_for_year(2016)
-weather_df = get_weather_data_for_year(2016)
+yelp_df = pd.read_csv("../data/yelp_data.csv")
+police_df = pd.read_csv("../data/police_data.csv")
+crime_df = pd.read_csv("../data/crime_data.csv")
+weather_df = get_weather_data_for_year()
 
 theft_index = crime_df['Primary Type'].str.contains('THEFT')
 battery_index = crime_df['Primary Type'].str.contains('BATTERY')
